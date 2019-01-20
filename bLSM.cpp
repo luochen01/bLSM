@@ -27,6 +27,9 @@
 #include <stasis/logger/filePool.h>
 #include "mergeStats.h"
 
+
+int bLSM::limit = 0;
+
 // Backpressure reads to avoid merge starvation?  Experimental/short-term hack
 //#define BACKPRESSURE_READS
 
@@ -47,7 +50,7 @@ bLSM::bLSM(int log_mode, pageid_t max_c0_size, pageid_t internal_region_size, pa
     this->mean_c0_run_length = max_c0_size;
     this->num_c0_mergers = 0;
 
-    r_val = 3.0; // MIN_R
+    r_val = 10.0; // MIN_R
     tree_c0 = NULL;
     tree_c0_mergeable = NULL;
     c0_is_merging = false;

@@ -671,7 +671,7 @@ recordid diskTreeComponent::internalNodes::lookup(int xid,
     return ret;
   } else {
     unlock(node->rwlatch);
-    recordid ret = {node->id, match, keySize};
+    recordid ret = {node->id, match, (int64_t)keySize};
     return ret;
   }
 }

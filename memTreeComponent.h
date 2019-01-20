@@ -174,7 +174,7 @@ public:
     typedef rbtree_t::const_iterator MTITER;
 
 
-    void populate_next_ret_impl(std::_Rb_tree_const_iterator<dataTuple*>/*MTITER*/ it) {
+    void populate_next_ret_impl(std::set<dataTuple*>::iterator/*MTITER*/ it) {
       num_batched_ = 0;
       cur_off_ = 0;
       while(it != s_->end() && num_batched_ < batch_size_) {

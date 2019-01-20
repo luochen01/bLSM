@@ -34,18 +34,18 @@ using namespace ::apache::thrift::protocol;
 using namespace ::apache::thrift::transport;
 using namespace ::apache::thrift::server;
 using namespace ::apache::thrift::concurrency;
-using boost::shared_ptr;
+//using boost::shared_ptr;
 
 using namespace mapkeeper;
 
 int main(int argc, char **argv) {
-    shared_ptr<LSMServerHandler> handler(new LSMServerHandler(argc, argv));
-    shared_ptr<TProcessor> processor(new MapKeeperProcessor(handler));
-    shared_ptr<TServerTransport> serverTransport(new TServerSocket(handler->port));
-    shared_ptr<TTransportFactory> transportFactory(new TFramedTransportFactory());
-    shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
-    shared_ptr<ThreadManager> threadManager = ThreadManager::newSimpleThreadManager(32);
-    shared_ptr<ThreadFactory> threadFactory(new PosixThreadFactory());
+    stdcxx::shared_ptr<LSMServerHandler> handler(new LSMServerHandler(argc, argv));
+    stdcxx::shared_ptr<TProcessor> processor(new MapKeeperProcessor(handler));
+    stdcxx::shared_ptr<TServerTransport> serverTransport(new TServerSocket(handler->port));
+    stdcxx::shared_ptr<TTransportFactory> transportFactory(new TFramedTransportFactory());
+    stdcxx::shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
+    stdcxx::shared_ptr<ThreadManager> threadManager = ThreadManager::newSimpleThreadManager(32);
+    stdcxx::shared_ptr<ThreadFactory> threadFactory(new PosixThreadFactory());
     //threadManager->threadFactory(threadFactory);
     //threadManager->start();
     TThreadedServer server(processor, serverTransport, transportFactory, protocolFactory);

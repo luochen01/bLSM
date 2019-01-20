@@ -28,9 +28,9 @@ using namespace apache::thrift::protocol;
 using namespace apache::thrift::transport;
 
 int main(int argc, char **argv) {
-    boost::shared_ptr<TSocket> socket(new TSocket("localhost", 9090));
-    boost::shared_ptr<TTransport> transport(new TFramedTransport(socket));
-    boost::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
+	stdcxx::shared_ptr<TSocket> socket(new TSocket("localhost", 9090));
+	stdcxx::shared_ptr<TTransport> transport(new TFramedTransport(socket));
+	stdcxx::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
 
     mapkeeper::MapKeeperClient client(protocol);
     transport->open();
@@ -123,5 +123,9 @@ int main(int argc, char **argv) {
     for (itr = scanResponse.records.begin(); itr != scanResponse.records.end(); itr++) {
         cout << itr->key << " " << itr->value << endl;
     }
+
+    cout<< "prepare shut down..."<<endl;
+    client.shutdown();
+    cout<< "shut down..."<<endl;
     return 0;
 }

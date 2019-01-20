@@ -27,7 +27,7 @@ Project(Stasis)
 
 SET(PACKAGE_VERSION 1)
 
-SUBDIRS(test servers/native)
+SUBDIRS(servers/native)
 
 # Main decisions
 SET(BUILD_SHARED_LIBS ON)
@@ -62,16 +62,16 @@ ENDMACRO(CREATE_CLIENT_EXECUTABLE NAME)
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../stasis/
 		    ${CMAKE_CURRENT_SOURCE_DIR}/../stasis/src/
 		    ${CMAKE_CURRENT_SOURCE_DIR}
-                    /home/y/include64
-		    /usr/include)
+            /usr/include64
+		    /usr/local/include)
 # set linker path for this and all subdirs
 LINK_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../stasis/build/src/stasis 
                  ${CMAKE_CURRENT_BINARY_DIR}
-                 /home/y/lib64)
+                 /usr/local/lib)
 
 FIND_LIBRARY(HAVE_STASIS NAMES stasis PATHS 
              ${CMAKE_CURRENT_SOURCE_DIR}/../stasis/build/src/stasis
-             /home/y/lib64)
+             /usr/local/lib)
 if(NOT HAVE_STASIS)
   message(STATUS "stasis not found; only building client library")
 endif(NOT HAVE_STASIS)
@@ -80,8 +80,8 @@ SET(CLIENT_LIBRARIES blsm_client pthread)
 
 IF ( "${CMAKE_C_COMPILER_ID}" STREQUAL "GNU" )
   SET(COMMON_LIBRARIES blsm stasis m pthread stdc++)  #-Wno-variadic-macros
-  SET(CMAKE_C_FLAGS "-g -Wall -pedantic -std=gnu99  -DPBL_COMPAT -D_FILE_OFFSET_BITS=64 ${CMAKE_C_FLAGS}")
-  SET(CMAKE_CXX_FLAGS "-g -Wall -Wno-long-long -pedantic -DPBL_COMPAT -D_FILE_OFFSET_BITS=64 ${CMAKE_CXX_FLAGS}")
+  SET(CMAKE_C_FLAGS "-g -Wall -pedantic -std=c++11  -DPBL_COMPAT -D_FILE_OFFSET_BITS=64 ${CMAKE_C_FLAGS}")
+  SET(CMAKE_CXX_FLAGS "-g -Wall -Wno-long-long -pedantic -std=c++11 -DPBL_COMPAT -D_FILE_OFFSET_BITS=64 ${CMAKE_CXX_FLAGS}")
 ELSEIF ( "${CMAKE_C_COMPILER_ID}" STREQUAL "SunPro" )
   SET(COMMON_LIBRARIES blsm stasis m pthread Crun Cstd)
   SET(CMAKE_C_FLAGS "-g -xc99=all -DPBL_COMPAT -D_FILE_OFFSET_BITS=64 ${CMAKE_C_FLAGS}")
@@ -89,12 +89,13 @@ ELSEIF ( "${CMAKE_C_COMPILER_ID}" STREQUAL "SunPro" )
 ELSE( "${CMAKE_C_COMPILER_ID}" STREQUAL "GNU" )
   # TODO: how to detect compilers correctly on old cmake???  This is a huge hack; it uses old gcc 
   # options, since cmake is old...
-  SET(COMMON_LIBRARIES blsm stasis m pthread stdc++)
-  SET(CMAKE_C_FLAGS "-g -Wall -pedantic -std=gnu99  -DPBL_COMPAT -D_FILE_OFFSET_BITS=64 ${CMAKE_C_FLAGS}")
-  SET(CMAKE_CXX_FLAGS "-g -Wall -Wno-long-long -pedantic -DPBL_COMPAT -D_FILE_OFFSET_BITS=64 ${CMAKE_CXX_FLAGS}")
+  SET(COMMON_LIBRARIES blsm stasis m pthread stdc++)  #-Wno-variadic-macros
+  SET(CMAKE_C_FLAGS "-g -Wall -pedantic -std=c++11  -DPBL_COMPAT -D_FILE_OFFSET_BITS=64 ${CMAKE_C_FLAGS}")
+  SET(CMAKE_CXX_FLAGS "-g -Wall -Wno-long-long -pedantic -std=c++11 -DPBL_COMPAT -D_FILE_OFFSET_BITS=64 ${CMAKE_CXX_FLAGS}")
 ENDIF ( "${CMAKE_C_COMPILER_ID}" STREQUAL "GNU" )
 
 #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 IF ( HAVE_STASIS )
   ADD_LIBRARY(blsm bLSM.cpp diskTreeComponent.cpp memTreeComponent.cpp dataPage.cpp mergeScheduler.cpp tupleMerger.cpp mergeStats.cpp mergeManager.cpp)
+  target_link_libraries(blsm stasis)
 ENDIF ( HAVE_STASIS )

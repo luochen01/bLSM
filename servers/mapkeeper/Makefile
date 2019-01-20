@@ -13,10 +13,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-THRIFT_DIR = /home/sears/local/thrift
+THRIFT_DIR=/usr/local/Cellar/thrift/0.11.0
 
 CPPFLAGS =-I../../../stasis -I../.. -I. -I $(THRIFT_DIR)/include/thrift -I../../../mapkeeper/thrift/gen-cpp
-CXXFLAGS =-g -O3
+CXXFLAGS =-g -O3 -std=c++11
 
 LDFLAGS=-lpthread -lblsm -lstasis -lmapkeeper -lthrift 	\
 	   -L $(THRIFT_DIR)/lib -L ../../../mapkeeper/thrift/gen-cpp	 		\
@@ -27,7 +27,10 @@ LDFLAGS=-lpthread -lblsm -lstasis -lmapkeeper -lthrift 	\
            -Wl,-rpath,/usr/local/lib							\
            -Wl,-rpath,$(THRIFT_DIR)/lib
 
-all: main/blsm_client main/blsm_server
+all: main/blsm_client main/blsm_server main/blsm_client_reopen
+
+
+main/blsm_client_reopen :
 
 main/blsm_client :
 

@@ -34,6 +34,8 @@ public:
 
   class iterator;
 
+  static int limit;
+
   // We want datapages to be as small as possible, assuming they don't force an extra seek to traverse the bottom level of internal nodes.
   // Internal b-tree mem requirements:
   //  - Assume keys are small (compared to stasis pages) so we can ignore all but the bottom level of the tree.
